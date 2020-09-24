@@ -11,14 +11,15 @@ const uuid = require("uuid");
 const firebaseAdmin = require('firebase-admin');
 firebaseAdmin.initializeApp();
 
+// trigger on newFirestoreRecord
 exports.newFirestoreRecord = functions
     .runWith(runtimeOpts)
     .region(regionName)
-    .firestore.document('dummy/{docId}')
+    .firestore.document('codementorship/{docId}')
     .onCreate(async (snap, context) => {
 
-        const newRecord = snap.data();
-        console.log('newRecord: ', JSON.stringify(newRecord))
+        const firestoreRecord = snap.data();
+        console.log('newFireStoreRecord: ', snap.id, JSON.stringify(firestoreRecord))
 
         // perform desired operations ...
         // as an example: lets create this record on realtime db as well
@@ -26,12 +27,13 @@ exports.newFirestoreRecord = functions
         const ref = db.ref();
 
         // NB! child is the docId of the record we are inserting!
-        let recordId = newRecord.id;
+        let recordId = snap.id;
         if (recordId === undefined) {
             recordId = uuid.v4();
         }
         const dbRef = ref.child(recordId);
-        await dbRef.set(newRecord
+        // here, optionally, you can pick and store only
+        await dbRef.set(firestoreRecord
         , function(error) {
             if (error) {
                 console.log('Error while setting data', error)
@@ -40,6 +42,31 @@ exports.newFirestoreRecord = functions
             }
         })
         console.log('DONE')
+
+        return true;
+    });
+
+// trigger on newDbRecord
+exports.newDbRecord = functions
+    .runWith(runtimeOpts)
+    .region(regionName)
+    .database.ref('/codementorship/{recordId}')
+    .onCreate(async (snap, context) => {
+
+        const dbRecord = snap.val();
+        console.log('newDbRecord: ', context.params.recordId, dbRecord);
+
+        let firestoreRecord = {};
+        firestoreRecord.id = context.params.recordId;
+        if (firestoreRecord.id === undefined) {
+            firestoreRecord.id = uuid.v4();
+        }
+        firestoreRecord.dbData = dbRecord.toJSON();
+
+        await firebaseAdmin
+            .firestore()
+            .collection('codementorship_copy')
+            .add(firestoreRecord);
 
         return true;
     });
