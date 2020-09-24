@@ -31,9 +31,8 @@ exports.newFirestoreRecord = functions
             recordId = uuid.v4();
         }
         const dbRef = ref.child(recordId);
-        await dbRef.set({
-            newRecord
-        }, function(error) {
+        await dbRef.set(newRecord
+        , function(error) {
             if (error) {
                 console.log('Error while setting data', error)
             } else {

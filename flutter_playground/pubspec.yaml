@@ -16,14 +16,14 @@ dependencies:
 
   flutter_bloc: ^6.0.5
   equatable: ^1.2.5
-  shared_preferences: ^0.5.10
+  shared_preferences: ^0.5.12
   hive: ^1.4.4
   hive_flutter: ^0.3.1
   http: ^0.12.2
   uuid: ^2.2.2
-  logger: ^0.9.2
+  logger: ^0.9.3
   package_info: ^0.4.3
-  device_info: ^0.4.2+7
+  device_info: ^0.4.2+8
   url_launcher: ^5.5.3
   jiffy:
     git: git://github.com/beerstorm-net/jiffy.git
