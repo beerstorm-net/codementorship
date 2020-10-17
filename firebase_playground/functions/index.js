@@ -6,6 +6,7 @@ const runtimeOpts = {
     memory: '256MB'
 }
 const uuid = require("uuid");
+const moment = require('moment');
 
 // The Firebase Admin SDK to access Cloud Firestore.
 const firebaseAdmin = require('firebase-admin');
@@ -42,6 +43,16 @@ exports.newFirestoreRecord = functions
             }
         })
         console.log('DONE')
+
+
+      // ... using moment.js ...
+      const prevMonth = moment().clone().subtract(1, 'months');
+      // First day of the previous month
+      const startPrevMonth = prevMonth.startOf('month').toDate();
+      // Last day of the previous month
+      const endPrevMonth = prevMonth.endOf('month').toDate();
+      // const end = moment().startOf('month').subtract(1, 'days');
+      console.log('startPrevMonth', startPrevMonth, 'endPrevMonth', endPrevMonth);
 
         return true;
     });
