@@ -105,7 +105,7 @@ class CommonUtils {
       {String devicePlatform = "ios"}) async {
     Map<String, dynamic> deviceInfo =
         await getDeviceInfo(devicePlatform: devicePlatform);
-    List<String> keys = List()
+    List<String> keys = []
       ..add('name')
       ..add('systemName')
       ..add('systemVersion')
